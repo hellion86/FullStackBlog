@@ -24,6 +24,7 @@ import mongoose from 'mongoose';
 import { registerValidation } from '../validations/auth.js';
 import { validationResult } from 'express-validator';
 import UserModel from '../models/User.js';
+import checkAuth from '../utils/checkAuth.js';
 
 mongoose
   .connect(
@@ -124,6 +125,26 @@ app.post('/auth/login', async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: 'Не удалось авторизоваться',
+    });
+  }
+});
+
+app.get('/auth/me', checkAuth, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+
+    if (!user) {
+      res.status(404).json({
+        message: 'Пользователь не найден',
+      });
+    }
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json(userData);
+  } catch (error) {
+    res.status(404).json({
+      message: 'Ошибка доступа',
     });
   }
 });
