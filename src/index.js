@@ -25,9 +25,8 @@ import {
   loginValidation,
   postCreateValidation,
 } from '../validations.js';
-import checkAuth from '../utils/checkAuth.js';
-import * as UserController from '../controllers/UserController.js';
-import * as PostController from '../controllers/PostController.js';
+import { UserController, PostController } from '../controllers/index.js';
+import { checkAuth, handleValidationErrors } from '../utils/index.js';
 
 mongoose
   .connect(
@@ -41,6 +40,7 @@ mongoose
   });
 
 const app = express();
+
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
     cb(null, 'uploads');
@@ -55,26 +55,49 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
 
-app.post('/auth/register', registerValidation, UserController.register);
-app.post('/auth/login', loginValidation, UserController.login);
+app.post(
+  '/auth/register',
+  registerValidation,
+  handleValidationErrors,
+  UserController.register
+);
+app.post(
+  '/auth/login',
+  loginValidation,
+  handleValidationErrors,
+  UserController.login
+);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
-  //console.log(req.file);
   res.json({
     url: `/uploads/${req.file.originalname}`,
   });
-  // res.json({
-  //   url: `/uploads/`,
-  // });
 });
 
 app.get('/posts/:id', PostController.getOne);
+
 app.get('/posts', PostController.getAll);
-app.post('/posts', checkAuth, postCreateValidation, PostController.create);
+
+app.post(
+  '/posts',
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.create
+);
+
 app.delete('/posts/:id', checkAuth, PostController.remove);
-app.patch('/posts/:id', checkAuth, PostController.update);
+
+app.patch(
+  '/posts/:id',
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.update
+);
 
 app.listen(4444, (err) => {
   if (err) {
