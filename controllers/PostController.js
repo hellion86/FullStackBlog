@@ -13,6 +13,38 @@ export const getAll = async (req, res) => {
   }
 };
 
+export const getNew = async (req, res) => {
+  try {
+    const posts = await PostModel.find()
+      .populate('user')
+      .sort({ createdAt: 'desc' })
+      .exec();
+
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
+export const getPopular = async (req, res) => {
+  try {
+    const posts = await PostModel.find()
+      .populate('user')
+      .sort({ viewsCount: 'desc' })
+      .exec();
+
+    res.json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
 export const getLastTags = async (req, res) => {
   try {
     const posts = await PostModel.find().limit(5).exec();

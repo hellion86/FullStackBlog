@@ -60,9 +60,12 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   });
 });
 
+app.get('/posts/popular', PostController.getPopular);
+app.get('/posts/new', PostController.getNew);
 app.get('/posts/:id', PostController.getOne);
 
 app.get('/posts', PostController.getAll);
+
 app.get('/tags', PostController.getLastTags);
 
 app.post(
