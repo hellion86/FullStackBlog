@@ -48,7 +48,7 @@ app.post(
 );
 app.post(
   '/auth/login',
-  loginValidation,
+  // loginValidation,
   handleValidationErrors,
   UserController.login
 );
