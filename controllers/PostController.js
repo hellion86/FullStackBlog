@@ -126,6 +126,35 @@ export const getOne = async (req, res) => {
   }
 };
 
+export const getOneTag = async (req, res) => {
+  try {
+    const tag = req.params.tagName;
+    console.log(tag);
+
+    PostModel.find({ tags: tag })
+      .populate('user')
+      .then((doc) => {
+        if (!doc) {
+          return res.status(400).json({
+            messsage: 'Таких тегов нет в наших постах',
+          });
+        }
+        return res.json(doc);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json({
+          message: 'Не удалось вернуть список статей по тегу',
+        });
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+};
+
 export const create = async (req, res) => {
   try {
     const { title, text, tags, imageUrl } = req.body;

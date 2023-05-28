@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import {
   registerValidation,
-  loginValidation,
+  // loginValidation,
   postCreateValidation,
 } from '../validations.js';
 import { UserController, PostController } from '../controllers/index.js';
@@ -24,6 +24,7 @@ mongoose
 const app = express();
 
 const storage = multer.diskStorage({
+  // TODO: add create folder if it exist
   destination: (_, __, cb) => {
     cb(null, 'uploads');
   },
@@ -67,6 +68,7 @@ app.get('/posts/:id', PostController.getOne);
 app.get('/posts', PostController.getAll);
 
 app.get('/tags', PostController.getLastTags);
+app.get('/tags/:tagName', PostController.getOneTag);
 
 app.post(
   '/posts',
