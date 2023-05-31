@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import mongoose from 'mongoose';
+import { mkdirSync, existsSync } from 'fs';
 import cors from 'cors';
 import {
   registerValidation,
@@ -24,13 +25,17 @@ mongoose
 const app = express();
 
 const storage = multer.diskStorage({
-  // TODO: add create folder if it exist
   destination: (_, __, cb) => {
+    try {
+      if (!existsSync('uploads')) {
+        mkdirSync('uploads');
+      }
+    } catch (error) {
+      console.log(error);
+    }
     cb(null, 'uploads');
   },
   filename: (_, file, cb) => {
-    // console.log('file is', file);
-    // cb(null, file.fieldname + '-' + Date.now());
     cb(null, file.originalname);
   },
 });
