@@ -25,6 +25,8 @@ export const postCreateValidation = [
       min: 10,
     })
     .isString(),
-  body('tags', 'Неверный формат тегов, укажите теги через запятую').optional(),
+  body('tags', 'Неверный формат тегов, укажите теги через запятую')
+    .optional()
+    .isString(),
   body('imageUrl', 'Некорректная ссылка на картинку').optional().isString(),
 ];

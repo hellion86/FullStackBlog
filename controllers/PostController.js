@@ -51,7 +51,8 @@ export const getLastTags = async (req, res) => {
     const tags = posts
       .map((post) => post.tags)
       .flat()
-      .slice(0, 5);
+      .slice(1)
+      .slice(-5);
 
     res.json(tags);
   } catch (error) {
@@ -156,13 +157,13 @@ export const getOneTag = async (req, res) => {
 };
 
 export const create = async (req, res) => {
-  // TODO: в каком виде теги уходят на сервер? должен быть массив
   try {
     const { title, text, tags, imageUrl } = req.body;
+    console.log(tags);
     const doc = new PostModel({
       title,
       text,
-      tags,
+      tags: tags.split(','),
       user: req.userId,
       imageUrl,
     });
@@ -177,35 +178,29 @@ export const create = async (req, res) => {
   }
 };
 
-export const update = (req, res) => {
-  // Теги - строка, проверить. А в БД они хранятся как массив.
-  console.log(req.body);
-  const postId = req.params.id;
-  const { title, text, imgUrl, tags } = req.body;
-  // const t = tags.split(',');
-  const user = req.userId;
-
-  PostModel.updateOne(
-    {
-      _id: postId,
-    },
-    {
-      title,
-      text,
-      imgUrl,
-      user,
-      tags,
-    }
-  )
-    .then(() => {
-      return res.json({
-        success: true,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).json({
-        message: 'Не корректный id статьи',
-      });
+export const update = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { title, text, imageUrl, tags } = req.body;
+    await PostModel.updateOne(
+      {
+        _id: postId,
+      },
+      {
+        title,
+        text,
+        tags: tags.split(','),
+        user: req.userId,
+        imageUrl,
+      }
+    );
+    return res.json({
+      success: true,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: 'Не корректный id статьи',
+    });
+  }
 };
