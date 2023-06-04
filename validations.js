@@ -30,3 +30,11 @@ export const postCreateValidation = [
     .isString(),
   body('imageUrl', 'Некорректная ссылка на картинку').optional().isString(),
 ];
+
+export const commentCreateValidation = [
+  body('text', 'Введит тескт комментария')
+    .isLength({
+      min: 1,
+    })
+    .isString(),
+];

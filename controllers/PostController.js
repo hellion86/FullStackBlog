@@ -130,7 +130,6 @@ export const getOne = async (req, res) => {
 export const getOneTag = async (req, res) => {
   try {
     const tag = req.params.tagName;
-    console.log(tag);
 
     PostModel.find({ tags: tag })
       .populate('user')

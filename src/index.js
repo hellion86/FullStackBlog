@@ -7,8 +7,13 @@ import {
   registerValidation,
   // loginValidation,
   postCreateValidation,
+  commentCreateValidation,
 } from '../validations.js';
-import { UserController, PostController } from '../controllers/index.js';
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from '../controllers/index.js';
 import { checkAuth, handleValidationErrors } from '../utils/index.js';
 
 mongoose
@@ -72,6 +77,8 @@ app.get('/posts/:id', PostController.getOne);
 
 app.get('/posts', PostController.getAll);
 
+app.get('/comments', CommentController.getAll);
+
 app.get('/tags', PostController.getLastTags);
 app.get('/tags/:tagName', PostController.getOneTag);
 
@@ -81,6 +88,14 @@ app.post(
   postCreateValidation,
   handleValidationErrors,
   PostController.create
+);
+
+app.post(
+  '/comments',
+  checkAuth,
+  commentCreateValidation,
+  handleValidationErrors,
+  CommentController.create
 );
 
 app.delete('/posts/:id', checkAuth, PostController.remove);
