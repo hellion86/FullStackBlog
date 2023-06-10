@@ -33,3 +33,18 @@ export const create = async (req, res) => {
     });
   }
 };
+
+export const getCommentsByPostId = async (req, res) => {
+  try {
+    const comments = await CommentModel.find({ post: { _id: req.params.id } })
+      .populate('user')
+      .populate('post')
+      .exec();
+    res.json(comments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Не удалось получить комментарии для данного поста',
+    });
+  }
+};

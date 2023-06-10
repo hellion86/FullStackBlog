@@ -78,6 +78,7 @@ app.get('/posts/:id', PostController.getOne);
 app.get('/posts', PostController.getAll);
 
 app.get('/comments', CommentController.getAll);
+app.get('/comments/:id', CommentController.getCommentsByPostId);
 
 app.get('/tags', PostController.getLastTags);
 app.get('/tags/:tagName', PostController.getOneTag);
