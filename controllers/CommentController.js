@@ -1,4 +1,5 @@
 import CommentModel from '../models/Comment.js';
+import PostModel from '../models/Post.js';
 
 export const getAll = async (req, res) => {
   try {
@@ -25,6 +26,26 @@ export const create = async (req, res) => {
     });
 
     const comment = await doc.save();
+
+    PostModel.findOneAndUpdate(
+      {
+        _id: req.body.postId,
+      },
+      {
+        $inc: { commentsCount: 1 },
+      },
+      {
+        returnDocument: 'after',
+      }
+    ).then((doc) => {
+      if (!doc) {
+        return res.status(404).json({
+          message: 'Статья не найдена, возможно удалена',
+        });
+      }
+    });
+
+    // console.log(comment);
     res.json(comment);
   } catch (error) {
     console.log(error);
@@ -34,6 +55,7 @@ export const create = async (req, res) => {
   }
 };
 
+// TODO : remove if necessary
 export const getCommentsByPostId = async (req, res) => {
   try {
     const comments = await CommentModel.find({ post: { _id: req.params.id } })
