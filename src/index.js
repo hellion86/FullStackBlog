@@ -1,30 +1,28 @@
-import express from 'express';
-import multer from 'multer';
-import mongoose from 'mongoose';
-import { mkdirSync, existsSync } from 'fs';
-import cors from 'cors';
+import express from "express";
+import multer from "multer";
+import mongoose from "mongoose";
+import { mkdirSync, existsSync } from "fs";
+import cors from "cors";
 import {
   registerValidation,
   // loginValidation,
   postCreateValidation,
   commentCreateValidation,
-} from '../validations.js';
+} from "../validations.js";
 import {
   UserController,
   PostController,
   CommentController,
-} from '../controllers/index.js';
-import { checkAuth, handleValidationErrors } from '../utils/index.js';
+} from "../controllers/index.js";
+import { checkAuth, handleValidationErrors } from "../utils/index.js";
 
 mongoose
-  .connect(
-    'mongodb+srv://vmezhurevsky:7NqUCHEhC2W58SfH@cluster0.uyeddc1.mongodb.net/blog'
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('DB connect ok');
+    console.log("DB connect ok");
   })
   .catch((err) => {
-    console.log('I cannot connect to DB error :', err);
+    console.log("I cannot connect to DB error :", err);
   });
 
 const app = express();
@@ -32,13 +30,13 @@ const app = express();
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
     try {
-      if (!existsSync('uploads')) {
-        mkdirSync('uploads');
+      if (!existsSync("uploads")) {
+        mkdirSync("uploads");
       }
     } catch (error) {
       console.log(error);
     }
-    cb(null, 'uploads');
+    cb(null, "uploads");
   },
   filename: (_, file, cb) => {
     cb(null, file.originalname);
@@ -48,43 +46,43 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 app.use(cors());
 
 app.post(
-  '/auth/register',
+  "/auth/register",
   registerValidation,
   handleValidationErrors,
   UserController.register
 );
 app.post(
-  '/auth/login',
+  "/auth/login",
   // loginValidation,
   handleValidationErrors,
   UserController.login
 );
-app.get('/auth/me', checkAuth, UserController.getMe);
+app.get("/auth/me", checkAuth, UserController.getMe);
 
-app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   res.json({
     url: `/uploads/${req.file.originalname}`,
   });
 });
 
-app.get('/posts/popular', PostController.getPopular);
-app.get('/posts/new', PostController.getNew);
-app.get('/posts/:id', PostController.getOne);
+app.get("/posts/popular", PostController.getPopular);
+app.get("/posts/new", PostController.getNew);
+app.get("/posts/:id", PostController.getOne);
 
-app.get('/posts', PostController.getAll);
+app.get("/posts", PostController.getAll);
 
-app.get('/comments', CommentController.getAll);
-app.get('/comments/:id', CommentController.getCommentsByPostId);
+app.get("/comments", CommentController.getAll);
+app.get("/comments/:id", CommentController.getCommentsByPostId);
 
-app.get('/tags', PostController.getLastTags);
-app.get('/tags/:tagName', PostController.getOneTag);
+app.get("/tags", PostController.getLastTags);
+app.get("/tags/:tagName", PostController.getOneTag);
 
 app.post(
-  '/posts',
+  "/posts",
   checkAuth,
   postCreateValidation,
   handleValidationErrors,
@@ -92,17 +90,17 @@ app.post(
 );
 
 app.post(
-  '/comments',
+  "/comments",
   checkAuth,
   commentCreateValidation,
   handleValidationErrors,
   CommentController.create
 );
 
-app.delete('/posts/:id', checkAuth, PostController.remove);
+app.delete("/posts/:id", checkAuth, PostController.remove);
 
 app.patch(
-  '/posts/:id',
+  "/posts/:id",
   checkAuth,
   postCreateValidation,
   handleValidationErrors,
@@ -113,5 +111,5 @@ app.listen(4444, (err) => {
   if (err) {
     return console.log(err);
   }
-  console.log('App start listen 4444');
+  console.log("App start listen 4444");
 });

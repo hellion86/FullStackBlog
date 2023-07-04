@@ -14,4 +14,4 @@ $ make install
 $ make start
 ```
 
-App will start on localhost:3000
+App will start on localhost:4444

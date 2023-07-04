@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
-import UserModel from '../models/User.js';
-import jwt from 'jsonwebtoken';
+import bcrypt from "bcrypt";
+import UserModel from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -21,9 +21,9 @@ export const register = async (req, res) => {
       {
         _id: user._id,
       },
-      'secert123',
+      "secert123",
       {
-        expiresIn: '30d',
+        expiresIn: "30d",
       }
     );
 
@@ -35,18 +35,18 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'Не удалось зарегистрироваться',
+      message: "Не удалось зарегистрироваться",
     });
   }
 };
 
 export const login = async (req, res) => {
-  // TODO check login validations
+  // TODO проверка валидации логина
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
       return res.status(404).json({
-        message: 'Такой пользователь не существует',
+        message: "Такой пользователь не существует",
       });
     }
 
@@ -57,7 +57,7 @@ export const login = async (req, res) => {
 
     if (!isValidPass) {
       return res.status(400).json({
-        message: 'Логин или пароль не верен',
+        message: "Логин или пароль не верен",
       });
     }
 
@@ -65,9 +65,9 @@ export const login = async (req, res) => {
       {
         _id: user._id,
       },
-      'secert123',
+      "secert123",
       {
-        expiresIn: '30d',
+        expiresIn: "30d",
       }
     );
 
@@ -80,7 +80,7 @@ export const login = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось авторизоваться',
+      message: "Не удалось авторизоваться",
     });
   }
 };
@@ -91,7 +91,7 @@ export const getMe = async (req, res) => {
 
     if (!user) {
       res.status(404).json({
-        message: 'Пользователь не найден',
+        message: "Пользователь не найден",
       });
     }
 
@@ -100,7 +100,7 @@ export const getMe = async (req, res) => {
     res.json(userData);
   } catch (error) {
     res.status(404).json({
-      message: 'Ошибка доступа',
+      message: "Ошибка доступа",
     });
   }
 };
