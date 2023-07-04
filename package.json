@@ -20,11 +20,7 @@
   },
   "scripts": {
     "start-dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "start1": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "node src/index.js"
   },
   "eslintConfig": {
     "extends": [
