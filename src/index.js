@@ -8,7 +8,7 @@ import {
   // loginValidation,
   postCreateValidation,
   commentCreateValidation,
-} from "../validations.js";
+} from "./validations.js";
 import {
   UserController,
   PostController,
