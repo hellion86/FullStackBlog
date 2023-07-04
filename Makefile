@@ -1,4 +1,4 @@
 install:
-		npm ci
+		yarn install
 start:
 		npm run start-dev
