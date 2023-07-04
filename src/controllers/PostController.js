@@ -1,14 +1,14 @@
-import PostModel from '../models/Post.js';
+import PostModel from "../models/Post.js";
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    const posts = await PostModel.find().populate("user").exec();
 
     res.json(posts);
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: "Не удалось получить статьи",
     });
   }
 };
@@ -16,15 +16,15 @@ export const getAll = async (req, res) => {
 export const getNew = async (req, res) => {
   try {
     const posts = await PostModel.find()
-      .populate('user')
-      .sort({ createdAt: 'desc' })
+      .populate("user")
+      .sort({ createdAt: "desc" })
       .exec();
 
     res.json(posts);
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: "Не удалось получить статьи",
     });
   }
 };
@@ -32,15 +32,15 @@ export const getNew = async (req, res) => {
 export const getPopular = async (req, res) => {
   try {
     const posts = await PostModel.find()
-      .populate('user')
-      .sort({ viewsCount: 'desc' })
+      .populate("user")
+      .sort({ viewsCount: "desc" })
       .exec();
 
     res.json(posts);
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: "Не удалось получить статьи",
     });
   }
 };
@@ -58,7 +58,7 @@ export const getLastTags = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить тэги',
+      message: "Не удалось получить тэги",
     });
   }
 };
@@ -73,7 +73,7 @@ export const remove = (req, res) => {
     .then((doc) => {
       if (!doc) {
         return res.status(404).json({
-          message: 'Статья не найдена, возможно удалена',
+          message: "Статья не найдена, возможно удалена",
         });
       }
       return res.json({
@@ -83,7 +83,7 @@ export const remove = (req, res) => {
     .catch((err) => {
       console.log(err);
       return res.status(500).json({
-        message: 'Не корректный id статьи',
+        message: "Не корректный id статьи",
       });
     });
 };
@@ -99,14 +99,14 @@ export const getOne = async (req, res) => {
         $inc: { viewsCount: 1 },
       },
       {
-        returnDocument: 'after',
+        returnDocument: "after",
       }
     )
-      .populate('user')
+      .populate("user")
       .then((doc) => {
         if (!doc) {
           return res.status(404).json({
-            message: 'Статья не найдена, возможно удалена',
+            message: "Статья не найдена, возможно удалена",
           });
         }
 
@@ -116,13 +116,13 @@ export const getOne = async (req, res) => {
       .catch((err) => {
         console.log(err);
         return res.status(500).json({
-          message: 'Не удалось вернуть  статью',
+          message: "Не удалось вернуть  статью",
         });
       });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: "Не удалось получить статьи",
     });
   }
 };
@@ -132,11 +132,11 @@ export const getOneTag = async (req, res) => {
     const tag = req.params.tagName;
 
     PostModel.find({ tags: tag })
-      .populate('user')
+      .populate("user")
       .then((doc) => {
         if (!doc) {
           return res.status(400).json({
-            messsage: 'Таких тегов нет в наших постах',
+            messsage: "Таких тегов нет в наших постах",
           });
         }
         return res.json(doc);
@@ -144,13 +144,13 @@ export const getOneTag = async (req, res) => {
       .catch((err) => {
         console.log(err);
         return res.status(500).json({
-          message: 'Не удалось вернуть список статей по тегу',
+          message: "Не удалось вернуть список статей по тегу",
         });
       });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: "Не удалось получить статьи",
     });
   }
 };
@@ -162,7 +162,7 @@ export const create = async (req, res) => {
     const doc = new PostModel({
       title,
       text,
-      tags: tags.split(','),
+      tags: tags.split(","),
       user: req.userId,
       imageUrl,
     });
@@ -172,7 +172,7 @@ export const create = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Не удалось создать статью',
+      message: "Не удалось создать статью",
     });
   }
 };
@@ -188,7 +188,7 @@ export const update = async (req, res) => {
       {
         title,
         text,
-        tags: tags.split(','),
+        tags: tags.split(","),
         user: req.userId,
         imageUrl,
       }
@@ -199,7 +199,7 @@ export const update = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: 'Не корректный id статьи',
+      message: "Не корректный id статьи",
     });
   }
 };

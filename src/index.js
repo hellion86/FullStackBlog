@@ -13,8 +13,8 @@ import {
   UserController,
   PostController,
   CommentController,
-} from "../controllers/index.js";
-import { checkAuth, handleValidationErrors } from "../utils/index.js";
+} from "./controllers/index.js";
+import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 mongoose
   .connect(process.env.MONGODB_URI)
