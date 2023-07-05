@@ -18,7 +18,5 @@
     "start-dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
-  "devDependencies": {
-    "@babel/plugin-transform-export-namespace-from": "^7.22.5"
-  }
+  "devDependencies": {}
 }
