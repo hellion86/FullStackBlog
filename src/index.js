@@ -17,7 +17,10 @@ import {
 import { checkAuth, handleValidationErrors } from "./utils/index.js";
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  //   .connect(process.env.MONGODB_URI)
+  .connect(
+    "mongodb+srv://vmezhurevsky:7NqUCHEhC2W58SfH@cluster0.uyeddc1.mongodb.net/blog"
+  )
   .then(() => {
     console.log("DB connect ok");
   })
